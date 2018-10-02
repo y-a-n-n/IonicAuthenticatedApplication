@@ -1,4 +1,6 @@
 # Ionic SPA with Authentication #
+[![Build Status](https://travis-ci.org/y-a-n-n/IonicAuthenticatedApplication.svg?branch=master)]
+(https://travis-ci.org/y-a-n-n/IonicAuthenticatedApplication)
 
 This is the skeleton of an Ionic 4+ application which requires authentication of the user with a remote server before 
 certain pages can be viewed. It uses an opinionated, event-based architecture which attempts to abstract business logic
