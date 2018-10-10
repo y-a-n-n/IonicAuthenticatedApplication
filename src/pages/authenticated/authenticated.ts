@@ -6,6 +6,7 @@ import {
 import {Subscription} from 'rxjs/Subscription';
 import {LogProvider} from 'ionic-log-file-appender';
 import {IEventSubscription} from '../../model/event-subscription';
+import {AuthProvider} from '../../providers/auth/auth';
 import {LoginPage} from '../login/login';
 
 /**
@@ -24,12 +25,10 @@ export class AuthenticatedPage {
               protected loadingCtrl: LoadingController,
               protected alertCtrl: AlertController,
               protected toastCtrl: ToastController,
-              protected platform: Platform) {
+              protected platform: Platform,
+              private auth: AuthProvider) {
   }
 
-  private modal: Modal;
-  private offerLoading: Loading;
-  private offerFetchLoading: Loading;
   private logoutLoading: Loading;
   private subscribed = false;
   private pauseSubscription: Subscription;
@@ -131,7 +130,7 @@ export class AuthenticatedPage {
 
   private loginListener =(loggedIn) => {
     if (!loggedIn) {
-      // TODO: this.notLoggedIn();
+      this.notLoggedIn();
     }
   };
 
@@ -174,14 +173,18 @@ export class AuthenticatedPage {
     toast.present();
   }
 
-  // TODO: notLoggedIn(): Promise<any> {
-  //   this.log.log('User is not logged in. Redirect to login page');
-  //   this.logoutLoading = this.loadingCtrl.create({content: 'Logging out...'});
-  //   this.logoutLoading.present();
-  //   return this.user.logout()
-  //     .then(() => this.showLoginPage())
-  //     .catch(() => this.showLoginPage());
-  // }
+  notLoggedIn(): Promise<any> {
+    this.log.log('User is not logged in. Redirect to login page');
+    this.logoutLoading = this.loadingCtrl.create({content: 'Logging out...'});
+    this.logoutLoading.present();
+    return this.auth.logout()
+      .then(() => this.showLoginPage())
+      .catch(() => {
+        this.log.log('Error performing remote log out');
+        // Redirect to login page anyway
+        this.showLoginPage()
+      });
+  }
 
   private showLoginPage() {
     this.logoutLoading.dismiss();

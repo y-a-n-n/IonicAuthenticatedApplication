@@ -3,6 +3,7 @@ import {
   AlertController, Events, IonicPage, LoadingController, ModalController, NavController, NavParams, Platform,
   ToastController
 } from 'ionic-angular';
+import {AuthProvider} from '../../providers/auth/auth';
 import {ExampleProvider} from '../../providers/example/example';
 import {AuthenticatedPage} from '../authenticated/authenticated';
 import {LogProvider} from 'ionic-log-file-appender';
@@ -27,8 +28,9 @@ export class HomePage extends AuthenticatedPage {
               alertCtrl: AlertController,
               toastCtrl: ToastController,
               platform: Platform,
+              auth: AuthProvider,
               private exampleProvider: ExampleProvider) {
-    super(navCtrl, navParams, log, events, modalCtrl, loadingCtrl, alertCtrl, toastCtrl, platform);
+    super(navCtrl, navParams, log, events, modalCtrl, loadingCtrl, alertCtrl, toastCtrl, platform, auth);
     // These subscriptions will be added and removed when page is resumed and paused, respectively
     this.subscriptions = [{tag: ExampleProvider.EVENT_TAG + ExampleProvider.EVENT_EXAMPLE_DATA, action: this.exampleDataReceived}];
   }
