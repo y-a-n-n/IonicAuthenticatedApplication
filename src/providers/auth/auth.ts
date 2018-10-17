@@ -97,12 +97,14 @@ export class AuthProvider {
    * @returns {Promise<any>}
    */
   private clearUserData(publish?: boolean): Promise<any> {
-    this.log.log('Clearing all user data');
+    this.log.log('Clearing all user data and ' + (publish ? 'publishing result' : 'not publishing result'));
     this.userData = null;
     return this.data.setGlobalValue(DataProvider.USER_KEY, null)
       .then(() => {
         this.log.log('Cleared all user data.');
-        this.events.publish(AuthProvider.EVENT_LOGIN, this.userData);
+        if (publish) {
+          this.events.publish(AuthProvider.EVENT_LOGIN, this.userData);
+        }
       })
       .catch(err => {
         this.log.log('Error clearing user data: ' + JSON.stringify(err));
